@@ -3,15 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using SharpNeat;
 
-public class TicTacToe : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
+public class TicTacToe : MonoBehaviour
+{
+	public enum SquareTypes
+	{
+		empty,
+		x,
+		o
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public class Move
+	{
+		int x;
+		int y;
+	}
+
+	public SquareTypes[,] Board { get; set; }
+
+	void Start()
+	{
+		Board = new SquareTypes[3, 3];
+	}
+
+	public interface IPlayer
+	{
+		Move GetMove(SquareTypes[,] board);
 	}
 }
