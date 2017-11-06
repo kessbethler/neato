@@ -3,30 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using SharpNeat;
 
+public enum PlayersMarks
+{
+	empty,
+	x,
+	o
+}
+
+public class Board
+{
+	public PlayersMarks[,] squares = new PlayersMarks[3, 3];
+
+	public void MarkSquare(int x, int y, PlayersMarks mark)
+	{
+		squares[x, y] = mark;
+	}
+}
+
+public interface IPlayer
+{
+	PlayersMarks assignedMark { get; set; }
+	System.Tuple<int,int> GetMove (Board currentBoard);
+}
+
+public class RandomPlayer : IPlayer
+{
+	public PlayersMarks assignedMark { get; set; }
+
+	public System.Tuple<int,int> GetMove (Board currentBoard)
+	{
+		int numberOfRows = currentBoard.squares.GetLength(0);
+		int numberOfCols = currentBoard.squares.GetLength(1);
+
+		int xPos = Random.Range (0, numberOfRows - 1);
+		int yPos = Random.Range (0, numberOfCols - 1);
+		System.Tuple<int,int> position = new System.Tuple<int,int>(xPos, yPos);
+
+		return position;
+	}
+}
+
 public class TicTacToe : MonoBehaviour
 {
-	public enum SquareTypes
-	{
-		empty,
-		x,
-		o
-	}
+	Board gameBoard = new Board();
 
-	public class Move
-	{
-		int x;
-		int y;
-	}
+	RandomPlayer rando = new RandomPlayer();
 
-	public SquareTypes[,] Board { get; set; }
-
-	void Start()
+	public void Start()
 	{
-		Board = new SquareTypes[3, 3];
-	}
-
-	public interface IPlayer
-	{
-		Move GetMove(SquareTypes[,] board);
+		System.Tuple<int, int> randosMove = rando.GetMove(gameBoard);
 	}
 }
